@@ -1,0 +1,38 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend/laravel-app  # Point to the correct directory where Dockerfile is located
+      dockerfile: Dockerfile
+    container_name: laravel-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/laravel-app:/var/www
+    networks:
+      - app-network
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:YOUR_APP_KEY_HERE
+
+  frontend:
+    build:
+      context: ./frontend  # Path to the frontend folder where Dockerfile is located
+      dockerfile: Dockerfile
+    container_name: nuxt-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    environment:
+      - BACKEND_URL=http://backend:8000
+
+networks:
+  app-network:
+    driver: bridge
+

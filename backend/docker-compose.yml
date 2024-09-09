@@ -1,0 +1,16 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./laravel-app
+      dockerfile: Dockerfile
+    container_name: laravel-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./laravel-app:/var/www
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:YOUR_APP_KEY_HERE
+

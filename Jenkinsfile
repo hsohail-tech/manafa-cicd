@@ -69,9 +69,13 @@ pipeline {
                     git commit -m "Automated commit for build #${env.BUILD_NUMBER}"
 
                     # Push changes to the remote repository
-                    git push -u origin build-${env.BUILD_NUMBER}
-					git push -u https://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@github.com/hsohail-tech/manafa-cicd.git build-${env.BUILD_NUMBER}
-                    """
+						withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+						// Set remote URL with token
+						sh 'git remote set-url origin https://$GITHUB_TOKEN@github.com/hsohail-tech/manafa-cicd.git'
+    
+						// Push changes to the remote repository
+						sh 'git push -u origin build-${env.BUILD_NUMBER}'
+}
                 }
             }
         }
@@ -89,4 +93,3 @@ pipeline {
         }
     }
 }
-
